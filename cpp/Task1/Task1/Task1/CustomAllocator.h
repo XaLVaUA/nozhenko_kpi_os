@@ -22,6 +22,7 @@ public:
 private:
 	std::list<mem_block*> *free_blocks_;
 	std::list<mem_block*> *used_blocks_;
+	mem_block* last_block_;
 
 	mem_block* find_first_block(size_t size);
 	mem_block* alloc_heap_mem_block(size_t size);

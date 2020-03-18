@@ -5,6 +5,7 @@ CustomAllocator::CustomAllocator()
 {
 	used_blocks_ = new std::list<mem_block*>();
 	free_blocks_ = new std::list<mem_block*>();
+	last_block_ = nullptr;
 }
 
 void* CustomAllocator::mem_alloc(const size_t size)
@@ -14,6 +15,11 @@ void* CustomAllocator::mem_alloc(const size_t size)
 	if (block == nullptr)
 	{
 		block = alloc_heap_mem_block(size);
+
+		if (block == nullptr)
+		{
+			return nullptr;
+		}
 	}
 
 	split_block(block, size);
@@ -56,6 +62,11 @@ CustomAllocator::mem_block* CustomAllocator::find_first_block(const size_t size)
 CustomAllocator::mem_block* CustomAllocator::alloc_heap_mem_block(size_t size)
 {
 	const auto mem = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size);
+
+	if (mem == nullptr)
+	{
+		return nullptr;
+	}
 	
 	const auto block = new mem_block();
 	block->next = nullptr;
@@ -64,6 +75,14 @@ CustomAllocator::mem_block* CustomAllocator::alloc_heap_mem_block(size_t size)
 	block->size = size;
 	
 	free_blocks_->push_back(block);
+
+	if (last_block_ != nullptr)
+	{
+		last_block_->next = block;
+		block->prev = last_block_;
+	}
+
+	last_block_ = block;
 	
 	return block;
 }
