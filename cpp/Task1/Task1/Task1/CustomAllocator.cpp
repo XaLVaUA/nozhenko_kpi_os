@@ -1,29 +1,19 @@
 ﻿#include "CustomAllocator.h"
 #include "Windows.h"
 
-CustomAllocator::CustomAllocator(size_t size)
+CustomAllocator::CustomAllocator()
 {
-	const auto heap_mem = alloc_heap_mem(size);
-	
-	auto start_block = new mem_block();
-	start_block->next = nullptr;
-	start_block->prev = nullptr;
-	start_block->ptr = static_cast<uint8_t*>(heap_mem);
-	start_block->size = size;
-
 	used_blocks_ = new std::list<mem_block*>();
 	free_blocks_ = new std::list<mem_block*>();
-
-	free_blocks_->push_back(start_block);
 }
 
 void* CustomAllocator::mem_alloc(const size_t size)
 {
-	const auto block = find_first_block(size);
+	auto block = find_first_block(size);
 
 	if (block == nullptr)
 	{
-		return nullptr;
+		block = alloc_heap_mem_block(size);
 	}
 
 	split_block(block, size);
@@ -63,9 +53,19 @@ CustomAllocator::mem_block* CustomAllocator::find_first_block(const size_t size)
 	return nullptr;
 }
 
-void* CustomAllocator::alloc_heap_mem(size_t size)
+CustomAllocator::mem_block* CustomAllocator::alloc_heap_mem_block(size_t size)
 {
-	return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size);
+	const auto mem = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size);
+	
+	const auto block = new mem_block();
+	block->next = nullptr;
+	block->prev = nullptr;
+	block->ptr = static_cast<uint8_t*>(mem);
+	block->size = size;
+	
+	free_blocks_->push_back(block);
+	
+	return block;
 }
 
 void CustomAllocator::split_block(mem_block *block, const size_t size)
