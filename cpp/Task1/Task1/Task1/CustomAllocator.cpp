@@ -8,8 +8,10 @@ CustomAllocator::CustomAllocator()
 	last_block_ = nullptr;
 }
 
-void* CustomAllocator::mem_alloc(const size_t size)
+void* CustomAllocator::mem_alloc(size_t size)
 {
+	size = align_size(size);
+	
 	auto block = find_first_block(size);
 
 	if (block == nullptr)
@@ -46,6 +48,11 @@ void CustomAllocator::mem_free(void* addr)
 		join_block(block);
 		return;
 	}
+}
+
+size_t CustomAllocator::align_size(size_t size)
+{
+	return (size + sizeof(intptr_t) - 1) & ~(sizeof(intptr_t) - 1);
 }
 
 CustomAllocator::mem_block* CustomAllocator::find_first_block(const size_t size)
