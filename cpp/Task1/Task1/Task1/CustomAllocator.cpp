@@ -110,12 +110,12 @@ void CustomAllocator::split_block(mem_block *block, const size_t size)
 
 void CustomAllocator::join_block(mem_block *block)
 {
-	if (contains_block(free_blocks_, block->prev))
+	if (block-> prev != nullptr && (block->prev + block->prev->size == block) && contains_block(free_blocks_, block->prev))
 	{
 		block = join_blocks(block->prev, block);
 	}
 
-	if (contains_block(free_blocks_, block->next))
+	if (block->next != nullptr && (block + block->size == block->next) && contains_block(free_blocks_, block->next))
 	{
 		block = join_blocks(block->next, block);
 	}
