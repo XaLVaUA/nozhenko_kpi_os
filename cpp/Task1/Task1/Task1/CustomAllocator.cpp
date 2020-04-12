@@ -44,8 +44,9 @@ void CustomAllocator::mem_free(void* addr)
 		if (block->ptr != ptr) continue;
 
 		used_blocks_->remove(block);
-		free_blocks_->push_back(block);
-		join_block(block);
+		const auto joined_block = join_block(block);
+		free_blocks_->push_back(joined_block);
+		
 		return;
 	}
 }
@@ -115,24 +116,26 @@ void CustomAllocator::split_block(mem_block *block, const size_t size)
 	free_blocks_->push_back(splitted_block);
 }
 
-void CustomAllocator::join_block(mem_block *block)
+CustomAllocator::mem_block* CustomAllocator::join_block(mem_block *block)
 {
-	if (block-> prev != nullptr && (block->prev + block->prev->size == block) && contains_block(free_blocks_, block->prev))
-	{
-		block = join_blocks(block->prev, block);
-	}
-
 	if (block->next != nullptr && (block + block->size == block->next) && contains_block(free_blocks_, block->next))
 	{
-		block = join_blocks(block->next, block);
+		join_blocks(block->next, block);
 	}
+
+	if (block->prev != nullptr && (block->prev + block->prev->size == block) && contains_block(free_blocks_, block->prev))
+	{
+		join_blocks(block->prev, block);
+		return block->prev;
+	}
+
+	return block;
 }
 
-CustomAllocator::mem_block* CustomAllocator::join_blocks(mem_block* left, mem_block* right)
+void CustomAllocator::join_blocks(mem_block* left, mem_block* right)
 {
 	left->size += right->size;
 	left->next = right->next;
-	return left;
 }
 
 bool CustomAllocator::contains_block(const std::list<mem_block*>* list, mem_block* block)

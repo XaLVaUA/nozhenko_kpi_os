@@ -2,10 +2,10 @@
 
 Blob::Blob(int num)
 {
-	_num = num;
+	num_ = num;
 }
 
 int Blob::get_num()
 {
-	return _num;
+	return num_;
 }

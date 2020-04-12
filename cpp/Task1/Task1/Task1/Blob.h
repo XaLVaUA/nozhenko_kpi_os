@@ -7,5 +7,5 @@ public:
 	int get_num();
 	
 private:
-	int _num;
+	int num_;
 };
