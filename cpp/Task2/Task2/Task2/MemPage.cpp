@@ -64,12 +64,12 @@ void MemPage::mem_free(void *addr)
 		
 		used_blocks_->remove(block);
 		const auto joined_block = join_block(block);
-		free_blocks_->push_back(joined_block);
+		free_blocks_->push_front(joined_block);
 
 		return;
 	}
 
-	if (used_blocks_->size() == 0)
+	if (used_blocks_->empty())
 	{
 		status_ = page_status::Free;
 	}
