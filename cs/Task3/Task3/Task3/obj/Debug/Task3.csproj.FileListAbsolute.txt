@@ -1,0 +1,10 @@
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\bin\Debug\Task3.exe.config
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\bin\Debug\Task3.exe
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\bin\Debug\Task3.pdb
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\obj\Debug\Task3.csprojAssemblyReference.cache
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\obj\Debug\Task3.MainForm.resources
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\obj\Debug\Task3.Properties.Resources.resources
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\obj\Debug\Task3.csproj.GenerateResource.cache
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\obj\Debug\Task3.csproj.CoreCompileInputs.cache
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\obj\Debug\Task3.exe
+D:\development\kpi\c3s2\os\cs\Task3\Task3\Task3\obj\Debug\Task3.pdb
